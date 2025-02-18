@@ -9,7 +9,7 @@ function Footer() {
         <div className="bg-[rgba(255,255,255,1)] pt-5 pb-5 text-black h-fit w-full flex-center flex-col gap-5   ">
             <p className="text-[rgba(0,0,0,1)] font-[700] text-[13px] leading-[18px] text-center ">AS AN AMAZON ASSOCIATE I EARN FROM QUALIFYING PURCHASES.</p>
 
-            <div className="flex gap-5 items-center">
+            <div className="flex gap-2 sm:gap-5 items-center">
                   <Iconbtn icon={<IoMdShare />} />
                   <Iconbtn icon={<FaMessage />} />
                   <Iconbtn icon={<FaFacebookMessenger />} />
