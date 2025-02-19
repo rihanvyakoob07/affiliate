@@ -57,7 +57,7 @@ function Products({ id }) {
          </div> 
 
 <     div className="w-full h-[85px] flex flex-col justify-between ">
-<div className="relative w-[139px] h-[30px] flex gap-5"> 
+<div className="relative w-[149px] h-[30px] flex gap-5"> 
     <p className="text-[rgba(17,24,39,1)]  inter text-[30px] leading-[30px] font-[700] ">${res.price}</p>
     <p className="text-[rgba(107,114,128,1)] inter font-[400] text-[18px] leading-[18px] absolute bottom-0 line-through right-0">$1,299.00</p>
     </div>
