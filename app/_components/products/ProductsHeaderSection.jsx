@@ -1,4 +1,4 @@
-
+"use client";
 import { IoPhonePortrait } from "react-icons/io5";
 import { MdComputer } from "react-icons/md";
 import { GiClothes } from "react-icons/gi";
@@ -8,11 +8,13 @@ import { CiCircleQuestion } from "react-icons/ci";
 import Link from "next/link";
 import FilterProducts from "../cards/FilterProducts";
 import AddProducts from "../cards/AddProducts";
-import data from "@/app/lib/data";
+// import data from "@/app/lib/data";
+import { useContext } from "react";
+import { GlobalContext } from "@/app/context/GobalContext";
 
 
 function ProductsHeaderSection() {
-
+const {data,setdata}=useContext(GlobalContext)
 
 
     return (
@@ -30,10 +32,10 @@ function ProductsHeaderSection() {
     </div>
 
     <div className="grid py-5 grid-cols-1 sm:grid-cols-3 xl:grid-cols-5 gap-4 ">
-        {data.map((items,index)=>(
-            <Link  href={`/individualproducts/${items.productId}`} >
-            <AddProducts key={index} price={items.price} text={items.text} imageUrl={items.image} />
-            </Link>
+        {data?.map((items,index)=>(
+            // <Link  href={} >
+            <AddProducts key={index} linkUrl={`/individualproducts/${items.productId}`} price={items.price} text={items.text} imageUrl={items.image} />
+            // </Link>
         ))}
     </div>
 
