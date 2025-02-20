@@ -9,12 +9,22 @@ import Link from "next/link";
 import FilterProducts from "../cards/FilterProducts";
 import AddProducts from "../cards/AddProducts";
 // import data from "@/app/lib/data";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { GlobalContext } from "@/app/context/GobalContext";
 
 
 function ProductsHeaderSection() {
 const {data,setdata}=useContext(GlobalContext)
+
+const [visibleCount, setVisibleCount] = useState(20); // Start with 20 products
+
+    // Slice the data to show only the required number of products
+    const visibleProducts = data?.slice(0, visibleCount);
+
+    // Function to load more products
+    const loadMoreProducts = () => {
+        setVisibleCount((prevCount) => prevCount + 20);
+    };
 
 
     return (
@@ -32,14 +42,22 @@ const {data,setdata}=useContext(GlobalContext)
     </div>
 
     <div className="grid py-5 grid-cols-1 sm:grid-cols-3 xl:grid-cols-5 gap-4 ">
-        {data?.map((items,index)=>(
+        {visibleProducts?.map((items,index)=>(
             // <Link  href={} >
             <AddProducts key={index} linkUrl={`/individualproducts/${items.productId}`} price={items.price} text={items.text} imageUrl={items.image} />
             // </Link>
         ))}
     </div>
 
-    <button className="bg-[rgba(37,99,235,1)] inter text-[rgba(255,255,255,1)] text-center font-[400] text-[16px] leading-[19.36px] w-[217.2px] rounded-[8px] border-[1px] h-[48px] border-[rgba(229,231,235,1)] ">Load More Products</button>
+    {/* <button className="bg-[rgba(37,99,235,1)] inter text-[rgba(255,255,255,1)] text-center font-[400] text-[16px] leading-[19.36px] w-[217.2px] rounded-[8px] border-[1px] h-[48px] border-[rgba(229,231,235,1)] ">Load More Products</button> */}
+    {visibleCount < data?.length && (
+                <button
+                    onClick={loadMoreProducts}
+                    className="bg-[rgba(37,99,235,1)] inter text-white text-center font-medium text-lg w-[217.2px] rounded-lg border border-gray-300 h-[48px] hover:bg-blue-700 transition duration-300"
+                >
+                    Load More Products
+                </button>
+            )}
 </div>
     )
 }
