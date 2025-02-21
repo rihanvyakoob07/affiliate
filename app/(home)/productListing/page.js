@@ -1,4 +1,4 @@
-import ProductsHeaderSection from "../_components/products/ProductsHeaderSection"
+import ProductsHeaderSection from "../../_components/products/ProductsHeaderSection"
 
 function ProductListing() {
    return (

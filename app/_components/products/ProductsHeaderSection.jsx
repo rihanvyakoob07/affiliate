@@ -32,7 +32,7 @@ const [visibleCount, setVisibleCount] = useState(20); // Start with 20 products
 
 
 
-    <div className="border-[rgba(229, 231, 235, 1)] border flex items-center justify-around border-[1px] border-[rgba(229,231,235,1)] max-w-[1280px] h-[132px] w-[100%] md:w-[90%] xl:w-[100%]">
+    <div className="border-[rgba(229, 231, 235, 1)] shadow-[0_1px_3px_0_rgba(0,0,0,0.1)]  border flex items-center justify-around border-[1px] border-[rgba(229,231,235,1)] max-w-[1280px] h-[132px] w-[100%] md:w-[90%] xl:w-[100%]">
     <FilterProducts text='Phones' icon={<IoPhonePortrait />} />
     <FilterProducts text='Gadgets' icon={<MdComputer />} />
     <FilterProducts text='Clothing' icon={<GiClothes />} />
