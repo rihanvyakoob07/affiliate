@@ -5,18 +5,22 @@ import { IoMenu } from "react-icons/io5";
 import { CiHeart } from "react-icons/ci";
 import { BsPerson } from "react-icons/bs";
 import { CiSearch } from "react-icons/ci";
+import { IoIosArrowRoundForward } from "react-icons/io";
 import Link from 'next/link';
 import { useContext, useState ,useEffect} from 'react';
 import { GlobalContext } from '@/app/context/GobalContext';
+import Input from '@/app/(admin)/admin/_components/Input';
 function Nav() {
  const { data, setdata } = useContext(GlobalContext);
     const [filterdata, setFilterdata] = useState("");
     const [errorMessage, setErrorMessage] = useState(false);
-    const [originalData, setOriginalData] = useState(data); // Store original data
+    const [originalData, setOriginalData] = useState(data); 
+    const [issignup,setsignup]=useState(false)
+
 
     useEffect(() => {
         if (!filterdata) {
-            setdata(originalData); // Restore original data when input is empty
+            setdata(originalData); 
             setErrorMessage(false);
             return;
         }
@@ -64,9 +68,10 @@ function Nav() {
         </div>
         </div>
        
-        <BsPerson />
+       <div onClick={()=>setsignup(!issignup)}>  <BsPerson /></div>
+      
     </div>
-    {/* Error Message with Animation */}
+    {/* Error Message if No Product Found */}
             {errorMessage && (
                 <div className="absolute top-5 left-1/2 transform -translate-x-1/2 bg-red-600 text-white text-[16px] px-4 py-2 rounded-lg shadow-md animate-slide-in">
                     No data found
@@ -93,6 +98,38 @@ function Nav() {
 
 
      
+
+     {issignup &&
+      <div className='fixed left-0 flex-center z-50 top-0 h-screen w-full bg-[rgba(0,0,0,0.5)]'>
+        
+                    <div className='h-[80vh]  p-8 w-[80vw]  xl:w-[30vw] flex flex-col justify-around rounded-[8px] bg-white'>
+                        <div>
+                        <p className='text-[20px] font-[700] inter leading-[20px]'>Log in</p>
+                        <p>Continue to Shoping</p>
+                        </div>
+
+                        <div className='flex flex-col gap-6'>
+                            <Input label='Email' placeholder='Email' />
+                            <Input label='Password' placeholder='Password' />
+                            <button className='w-full h-[40px] rounded-[8px] bg-blue-200'>
+                                Log in
+                            </button>
+
+                        </div>
+                        <div className='flex w-full items-center justify-between '>
+                        <div className='flex items-center gap-1' >
+                            <p>Admin ?  </p>
+                            <Link href='/admin'>
+                            <span className='text-blue-400 flex items-center '>Get started <IoIosArrowRoundForward /></span> 
+                            </Link>
+                        </div>
+                        <Link href='/'>  <i onClick={()=>setsignup(false)} className='text-blue-400 text-[13px]' >Go to Home</i></Link>
+                        </div>
+                       
+                    </div>
+
+        </div>
+        }
 </div>
     )
 }
