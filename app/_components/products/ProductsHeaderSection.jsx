@@ -5,12 +5,12 @@ import { GiClothes } from "react-icons/gi";
 import { MdHeadset } from "react-icons/md";
 import { FaGamepad } from "react-icons/fa6";
 import { CiCircleQuestion } from "react-icons/ci";
-import Link from "next/link";
-import FilterProducts from "../cards/FilterProducts";
-import AddProducts from "../cards/AddProducts";
+
 // import data from "@/app/lib/data";
 import { useContext, useState } from "react";
 import { GlobalContext } from "@/app/context/GobalContext";
+import FilterProducts from "../cards/FilterProducts";
+import AddProducts from "../cards/AddProducts";
 
 
 function ProductsHeaderSection() {
@@ -32,7 +32,7 @@ const [visibleCount, setVisibleCount] = useState(20); // Start with 20 products
 
 
 
-    <div className="bg-[rgba(229,231,235,1)] flex items-center justify-around border-[1px] border-[rgba(229,231,235,1)] max-w-[1280px] h-[132px] w-[100%] md:w-[90%] xl:w-[100%]">
+    <div className="border-[rgba(229, 231, 235, 1)] border flex items-center justify-around border-[1px] border-[rgba(229,231,235,1)] max-w-[1280px] h-[132px] w-[100%] md:w-[90%] xl:w-[100%]">
     <FilterProducts text='Phones' icon={<IoPhonePortrait />} />
     <FilterProducts text='Gadgets' icon={<MdComputer />} />
     <FilterProducts text='Clothing' icon={<GiClothes />} />

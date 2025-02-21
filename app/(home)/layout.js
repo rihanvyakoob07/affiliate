@@ -1,9 +1,9 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Nav from "./_components/home/header/Nav";
-import GlobalContextprovider from "./context/GobalContext";
-// import Footer from "./_components/home/footer/Footer";
+import "../globals.css";
+import Nav from "../_components/home/header/Nav";
+import GlobalContextprovider from "../context/GobalContext";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
        
         {children}
         </GlobalContextprovider>
-        {/* <Footer /> */}
+   
       </body>
     </html>
   );
