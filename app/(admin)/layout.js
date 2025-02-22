@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
                <Sidebar  />
             </div>
        
-           <div className="w-full p-5 sm:p-12 bg-[rgba(229,231,235,1)] h-screen overflow-y-scroll"> 
+           <div className="w-full p-3 sm:p-8 bg-[rgba(229,231,235,1)] h-screen overflow-y-scroll"> 
               
                <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
                {children}

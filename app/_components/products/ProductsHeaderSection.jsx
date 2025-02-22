@@ -27,6 +27,9 @@ const [visibleCount, setVisibleCount] = useState(20); // Start with 20 products
     };
 
 
+    
+
+
     return (
         <div className="bg-white w-full flex-col flex-center py-5">
 
