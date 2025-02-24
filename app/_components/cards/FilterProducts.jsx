@@ -1,6 +1,6 @@
-function FilterProducts({text,icon}) {
+function FilterProducts({text,icon,onclink}) {
     return (
-        <div className="flex flex-col gap-2">
+ <div onClick={onclink} className="flex flex-col gap-2">
 <div className="flex-center text-[rgba(79,70,229,1)] bg-[rgba(224,231,255,1)] h-[56px] w-[56px] rounded-full border-[1px] border-[rgba(229,231,235,1)] ">
     {icon}
 </div>

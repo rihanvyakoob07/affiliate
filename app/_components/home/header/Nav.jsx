@@ -1,7 +1,5 @@
 "use client";
-import Image from 'next/image';
-import logo from '../../../../public/logo.png'
-import { IoMenu } from "react-icons/io5";
+
 import { CiHeart } from "react-icons/ci";
 import { BsPerson } from "react-icons/bs";
 import { CiSearch } from "react-icons/ci";
@@ -10,41 +8,70 @@ import Link from 'next/link';
 import { useContext, useState ,useEffect} from 'react';
 import { GlobalContext } from '@/app/context/GobalContext';
 import Input from '@/app/(admin)/admin/_components/Input';
+
+
+import Cart from "../../Cart";
 function Nav() {
- const { data, setdata } = useContext(GlobalContext);
+ const { data, setdata ,cart,cartItems,setCartitems} = useContext(GlobalContext);
     const [filterdata, setFilterdata] = useState("");
     const [errorMessage, setErrorMessage] = useState(false);
     const [originalData, setOriginalData] = useState(data); 
     const [issignup,setsignup]=useState(false)
+  
 
 
-    useEffect(() => {
-        if (!filterdata) {
-            setdata(originalData); 
+   useEffect(() => {
+    setOriginalData(data); 
+}, [data]);
+
+useEffect(() => {
+    if (!filterdata) {
+        setdata(originalData); 
+        setErrorMessage(false);
+        return;
+    }
+
+    const filteredData = originalData?.filter((item) =>
+        item.name.toLowerCase().includes(filterdata.toLowerCase())
+    );
+
+    if (filteredData.length > 0) {
+        setdata(filteredData);
+        setErrorMessage(false);
+    } else {
+        setErrorMessage(true);
+
+        
+        const timeout = setTimeout(() => {
             setErrorMessage(false);
-            return;
-        }
+            setFilterdata(""); // Clear input field
+            setdata(originalData); // Restore original data
+        }, 1000);
 
-        const filteredData = originalData?.filter((item) =>
-            item.text.toLowerCase().includes(filterdata.toLowerCase())
-        );
+        // return () => clearTimeout(timeout);
+    }
+}, [filterdata, originalData]);
 
-        if (filteredData.length > 0) {
-            setdata(filteredData);
-            setErrorMessage(false);
-        } else {
-            setErrorMessage(true);
 
-            // Restore original data after 1 second
-            const timeout = setTimeout(() => {
-                setErrorMessage(false);
-                setFilterdata(""); // Clear the input field
-                setdata(originalData); // Restore original data
-            }, 1000);
 
-            return () => clearTimeout(timeout); // Cleanup timeout
-        }
-    }, [filterdata]);
+    const increaseQuantity = (id) => {
+  setCart(cart.map(item => 
+    item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+  ));
+};
+
+const decreaseQuantity = (id) => {
+  setCart(cart.map(item => 
+    item.id === id && item.quantity > 1 
+      ? { ...item, quantity: item.quantity - 1 } 
+      : item
+  ));
+};
+
+const removeFromCart = (id) => {
+  setCart(cart.filter(item => item.id !== id));
+};
+
 
 
 
@@ -54,17 +81,18 @@ function Nav() {
     <Link href='/'><div className="h-[32px] w-[32px] bg-black">1</div></Link>
 
     <div className="max-w-[768px] px-3  flex items-center justify-between h-[44px] border-[1px] rounded-[10px] border-[rgba(229,231,235,1)] sm:w-[80%] xl:w-[100%] ">
-        <input    value={filterdata}
+        <input  
+          value={filterdata}
                     onChange={(e) => setFilterdata(e.target.value)}  type="text" placeholder="Search for products, brands, and more..." className="w-[80%] outline-none" />
 
         <CiSearch />
     </div>
 
-    <div className="flex items-center gap-2">
-        <div className="relative text-[20px] "> 
+    <div  className="flex items-center gap-2">
+        <div onClick={()=>setCartitems(true)} className="relative text-[20px] "> 
             <CiHeart />
         <div className="absolute w-[16px] rounded-full h-[16px] border-[rgba(229,231,235,1)] border-[1px] bg-[rgba(239,68,68,1)] right-[-7px] top-[-5px] flex-center ">
-            <p className="inter text-[rgba(255,255,255,1)] font-[400] text-[12px] leading-[14.52px] ">3</p>
+            <p className="inter text-[rgba(255,255,255,1)] font-[400] text-[12px] leading-[14.52px] "> {cart.length}</p>
         </div>
         </div>
        
@@ -95,6 +123,18 @@ function Nav() {
                     animation: slideIn 0.3s ease-in-out;
                 }
             `}</style>
+
+
+
+{cartItems && (
+  <div className="fixed h-full z-50 w-full top-0 flex-center left-0 bg-[rgba(0,0,0,0.5)]">
+    <div className='w-[80%] h-[80%]  '><Cart /></div>
+    
+  </div>
+)}
+
+
+      
 
 
      

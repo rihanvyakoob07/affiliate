@@ -1,3 +1,5 @@
+"use client";
+import axios from "axios";
 import RecordCard from "./cards/RecordCard"
 import { IoMdContacts } from "react-icons/io";
 import { FaChartSimple } from "react-icons/fa6";
@@ -10,6 +12,7 @@ import { IoIosArrowUp } from "react-icons/io";
 import { FiImage } from "react-icons/fi";
 import { LuUpload } from "react-icons/lu";
 import Graph from "./Graph";
+import { useState } from "react";
 function Records() {
 const Recordvalue =[{
     purpose :'Total Visitors',
@@ -50,6 +53,43 @@ const Recordvalue =[{
 ]
 
 
+// axios
+
+
+ const [productName, setProductName] = useState("");
+  const [price, setPrice] = useState("");
+  const [url, setUrl] = useState("");
+  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState(null); 
+
+  const handleImageUpload = (e) => {
+    setImage(e.target.files[0]); 
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("name", productName);
+      formData.append("price", price);
+      formData.append("url", url);
+      formData.append("category", category);
+      formData.append("description", description);
+      formData.append("image", image); // Image upload
+
+      const response = await axios.post("http://localhost:3001/api/products", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      console.log("Product added successfully:", response.data);
+      alert("Product added successfully!");
+    } catch (error) {
+      console.error("Error adding product:", error);
+      alert("Failed to add product");
+    }
+  };
+
+
     return (
         <div className="w-full ">
         <div className="my-5 grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4 max-w-[1120px]  ">
@@ -65,22 +105,17 @@ const Recordvalue =[{
          <div className="flex flex-col gap-2">
             <p className="text-[rgba(0,0,0,1)] inter font-[600] text-[18px] leading-[21.78px] ">Add New Product</p>
             <div className="flex flex-col  gap-2">
-                <Input label='Product Name' placeholder='Enter product name' />
-                 <Input label='Price' placeholder='Enter price' />
-                 <Dropdown
-                  
-         />
-                <Input label='URL' placeholder='Enter URL' />
-
-
-               
-
-                <div>
-                     <div className="flex flex-col gap-1">
+                <Input onchange={(e)=>setProductName(e.target.value)} label='Product Name' placeholder='Enter product name' />
+                 <Input onchange={(e)=>setPrice(e.target.value)} label='Price' placeholder='Enter price' />
+                  <Dropdown onSelect={setCategory} />
+                  <Input onchange={(e)=>setUrl(e.target.value)} label='URL' placeholder='Enter URL' />
+                  <div>
+                    
+                    <div className="flex flex-col gap-1">
                     <label className="inter font-[500] text-[14px] text-[16.94px] text-[rgba(55,65,81,1)] ">
                            Description
                     </label>
-                    <textarea className="font-[400] inter placeholder-[rgba(173,174,188,1)] border rounded-[8px] h-[90px] px-2 border-[rgba(209,213,219,1)] text-[16px] leading-[24px] " placeholder='Enter product description'>
+                    <textarea onChange={(e)=> setDescription(e.target.value)} className="font-[400] inter placeholder-[rgba(173,174,188,1)] border rounded-[8px] h-[90px] px-2 border-[rgba(209,213,219,1)] text-[16px] leading-[24px] " placeholder='Enter product description'>
 
                     </textarea>
                 </div>
@@ -93,13 +128,24 @@ const Recordvalue =[{
 
 
           <div className="flex flex-col gap-8 sm:gap-0 h-full justify-between ">
-               <div className="h-[304px] w-full bg-[rgba(217,217,217,1)] flex-center text-[48px] "><LuUpload /></div>
+               <div className="h-[304px] w-full bg-[rgba(217,217,217,1)] flex-center text-[48px] ">
+
+                <input onChange={handleImageUpload} type='file' />
+                {/* <LuUpload /> */}
+                
+                </div>
 
 
                <div className="flex items-center gap-4">
-                <div className="h-[80px] sm:h-[133px] w-full bg-[rgba(217,217,217,1)] flex-center "><FiImage  /></div>
-                <div className="h-[80px] sm:h-[133px] w-full bg-[rgba(217,217,217,1)] flex-center "><FiImage  /></div>
-                <div className="h-[80px] sm:h-[133px] w-full bg-[rgba(217,217,217,1)] flex-center "><FiImage  /></div>
+                <div className="h-[80px] sm:h-[133px] w-full bg-[rgba(217,217,217,1)] flex-center ">
+                     {/* <input onchange={(e)=> setimagetwo(e.target.value)} type='file' /> */}
+                     <FiImage  /></div>
+                <div className="h-[80px] sm:h-[133px] w-full bg-[rgba(217,217,217,1)] flex-center ">
+                     {/* <input onchange={(e)=> setimagethree(e.target.value)} type='file' /> */}
+                     <FiImage  /></div>
+                <div className="h-[80px] sm:h-[133px] w-full bg-[rgba(217,217,217,1)] flex-center ">
+                     {/* <input onchange={(e)=> setimagefour(e.target.value)} type='file' /> */}
+                     <FiImage  /></div>
                </div>
             
           </div>
@@ -109,7 +155,7 @@ const Recordvalue =[{
 
           <div className="w-full  sm:col-span-2 flex-center ">
 
-            <div className="bg-[rgba(147,51,234,1)] active:bg-[rgb(186,130,239)] text-[rgba(255,255,255,1)] inter text-center leading-[19.36px] text-[16px] font-[400] flex-center rounded-[8px] h-[40px] w-[506px] ">Add Link</div>
+            <div onClick={handleSubmit} className="bg-[rgba(147,51,234,1)] active:bg-[rgb(186,130,239)] text-[rgba(255,255,255,1)] inter text-center leading-[19.36px] text-[16px] font-[400] flex-center rounded-[8px] h-[40px] w-[506px] ">Add Link</div>
 
           </div>
 

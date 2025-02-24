@@ -1,12 +1,20 @@
-import data from "@/app/lib/data";
+"use client"
 import { FaShoppingCart } from "react-icons/fa";
 import { IoMdShare } from "react-icons/io";
 import { TbShape } from "react-icons/tb";
 import { BsTagFill } from "react-icons/bs";
 import { FaStar } from "react-icons/fa";
+import { useContext } from "react";
+import { GlobalContext } from "@/app/context/GobalContext";
+import Image from "next/image";
+
+const baseUrl = "http://localhost:3001";
+
 function Products({ id }) {
+
+  const {data}=useContext(GlobalContext)
   
-  const res = data.find((el) => el.productId == id); 
+  const res = data.find((el) => el.id == id); 
 
   if (!res) {
     return <div>Product not found.</div>;
@@ -16,12 +24,16 @@ function Products({ id }) {
     <div className="flex-center bg-white h-fit   w-full">
     <div className="h-fit p-8 grid grid-cols-1 sm:grid-cols-2 gap-6 ">
     <div className="p-5 max-w-[592px] h-fit flex-center gap-2 flex-col rounded-[8px] border-[1px] border-[rgba(229,231,235,1)] bg-[rgba(229,231,235,1)] w-[100%]  ">
-        <div style={{backgroundImage:`url(${res.image})`}} className="h-[560px] w-full bg-cover rounded-[8px] bg-center  "></div>
-
+        <div 
+        
+         className="h-[560px] w-full  bg-cover rounded-[8px] bg-center  ">
+          <Image src={`${baseUrl}${res.image}`} alt={res.name}  width={236}  height={100} className="w-full  object-cover" />
+         </div>
+   
         <div>
 
 <div className="flex  items-center gap-1 xl:gap-2 w-full">
-  {Object.values(res.subimage[0]).map((image, index) => (
+  {Object.values(res.image[0]).map((image, index) => (
     <div
       key={index}
       className="h-[70px] w-[70px] sm:w-[80px] sm:h-[80px] xl:w-[136px] xl:h-[136px] rounded-[8px] bg-[rgba(243,244,246,1)] flex justify-center items-center border border-[rgba(229,231,235,1)] "
@@ -42,13 +54,13 @@ function Products({ id }) {
 
     <div className="flex flex-col gap-4">
         <div className="h-[68px] flex flex-col justify-between ">
-         <p className="text-[rgba(17,24,39,1)]  inter leading-[30px] text-[30px] font-[700] ">{res.text}</p>
+         <p className="text-[rgba(17,24,39,1)]  inter leading-[30px] text-[30px] font-[700] ">{res.name}</p>
 
 <div className="flex  text-[16px] items-center gap-2">
       {[...Array(5)].map((_, index) => (
         <FaStar
           key={index}
-        //   size={20}
+        
           className={index < 5 ? "text-[rgba(250,204,21,1)] " : "text-gray-300"}
         />
       ))}
