@@ -15,26 +15,43 @@ import AddProducts from "../cards/AddProducts";
 
 function ProductsHeaderSection() {
   
-const {data,setdata,cart,setCart}=useContext(GlobalContext)
-const [selectedCategory, setSelectedCategory] = useState("all");
+    const {data,cart,setCart,displaydata,}=useContext(GlobalContext)
 
-  const [visibleCount, setVisibleCount] = useState(10); // Start with 20 products
+    const [selectedCategory, setSelectedCategory] = useState("all");
 
-const filteredProducts =
-    selectedCategory === "all"
-      ? data
-      : data.filter((el) => el.category.toLowerCase() === selectedCategory.toLowerCase());
+    const [filterdata, setFilterdata] = useState([]); 
 
-  // Slice the data to show only the required number of products
-  const visibleProducts = filteredProducts.slice(0, visibleCount);
+    const [visibleCount,setVisibleCount] =useState(10)
 
-  // Function to load more products
-  const loadMoreProducts = () => {
+  useEffect(()=>{
+    setFilterdata(displaydata)
+  },[displaydata])
+
+
+   useEffect(() => {
+    if (selectedCategory === "all") {
+      setFilterdata(data)
+      return
+    }
+    
+    const filtered = displaydata.filter((el) => el.category.toLowerCase() === selectedCategory.toLowerCase())
+    console.log("Filtered",filtered);
+    
+     setFilterdata(filtered)                     
+    }, [selectedCategory]);
+
+
+
+  
+     const visibleProducts = filterdata.slice(0, visibleCount);
+
+  
+     const loadMoreProducts = () => {
     setVisibleCount((prevCount) => prevCount + 10);
-  };
+    };
 
 
-  const addCart = (product) => {
+    const addCart = (product) => {
   const check = cart.some((el) => el.id === product.id);
   console.log(cart);
 
@@ -43,8 +60,8 @@ const filteredProducts =
       if (items.id === product.id) {
         return {
           ...items,
-          quantity: (items.quantity || 1) + 1, // Ensure quantity is at least 1
-          totalPrice: (items.price || 0) * ((items.quantity || 1) + 1), // Prevent NaN
+          quantity: (items.quantity || 1) + 1, 
+          totalPrice: (items.price || 0) * ((items.quantity || 1) + 1), 
         };
       }
       return items;
@@ -55,12 +72,12 @@ const filteredProducts =
       ...cart,
       {
         ...product,
-        quantity: 1, // Initialize quantity
-        totalPrice: product.price || 0, // Ensure totalPrice is not NaN
+        quantity: 1,
+        totalPrice: product.price || 0, 
       },
     ]);
   }
-};
+    };
 
  
 
@@ -83,13 +100,13 @@ const filteredProducts =
     </div>
 
     <div className="grid py-5 grid-cols-1 sm:grid-cols-3 xl:grid-cols-5 gap-4 ">
-      {visibleProducts.length > 0 ? (
+      {filterdata.length > 0 ? (
           visibleProducts.map((item, index) => (
             <AddProducts
               key={index}
               linkUrl={`/individualproducts/${item.id}`}
               price={item.price}
-              text={item.name}
+              text={item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase()}
               imageUrl={item.image}
               onclick={() => addCart(item)}
             />
@@ -100,7 +117,7 @@ const filteredProducts =
     </div>
 
     
-     {visibleCount < filteredProducts.length && (
+     {visibleCount < filterdata.length && (
         <button
           onClick={loadMoreProducts}
           className="bg-blue-600 text-white text-center font-medium text-lg w-[217.2px] rounded-lg border border-gray-300 h-[48px] hover:bg-blue-700 transition duration-300"

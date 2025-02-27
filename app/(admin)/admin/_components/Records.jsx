@@ -12,7 +12,12 @@ import { IoIosArrowUp } from "react-icons/io";
 import { FiImage } from "react-icons/fi";
 import { LuUpload } from "react-icons/lu";
 import Graph from "./Graph";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+
+
+
+const baseUrl = "http://localhost:3001";
 function Records() {
 const Recordvalue =[{
     purpose :'Total Visitors',
@@ -61,11 +66,16 @@ const Recordvalue =[{
   const [url, setUrl] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null); 
+  const [preview, setPreview] = useState("");
 
-  const handleImageUpload = (e) => {
-    setImage(e.target.files[0]); 
-  };
+  // const [image, setImage] = useState(null); 
+
+  
+
+
+   const [image, setImage] = useState(null);
+
+  
 
   const handleSubmit = async () => {
     try {
@@ -81,15 +91,38 @@ const Recordvalue =[{
         headers: { "Content-Type": "multipart/form-data" },
       });
 
+      setPreview(false)
+      // productName('')
+      // setPrice('')
+      //  setUrl('')
+      //  setCategory('')
+      //  setDescription('')
       console.log("Product added successfully:", response.data);
       alert("Product added successfully!");
     } catch (error) {
       console.error("Error adding product:", error);
-      alert("Failed to add product");
+      alert("Only image files (jpg, jpeg, png, gif) are allowed or url cant be empty");
     }
   };
 
+ const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
+    if (!file.type.startsWith("image/")) {
+      alert("Please upload a valid image file.");
+      return;
+    }
+
+    setImage(file);
+    setPreview(URL.createObjectURL(file));
+  };
+
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
     return (
         <div className="w-full ">
         <div className="my-5 grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4 max-w-[1120px]  ">
@@ -128,12 +161,29 @@ const Recordvalue =[{
 
 
           <div className="flex flex-col gap-8 sm:gap-0 h-full justify-between ">
-               <div className="h-[304px] w-full bg-[rgba(217,217,217,1)] flex-center text-[48px] ">
-
-                <input onChange={handleImageUpload} type='file' />
-                {/* <LuUpload /> */}
-                
-                </div>
+           <div className="flex flex-col gap-6">
+          <div className="w-full h-[330px] bg-[rgba(217,217,217,1)] flex justify-center items-center overflow-hidden">
+            {preview ? (
+              <img
+                src={preview}
+                alt="Preview"
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center">
+                <LuUpload className="text-4xl text-gray-500" />
+                <p className="text-gray-500">Upload Image</p>
+                <input
+                  id="file-upload"
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                />
+              </label>
+            )}
+          </div>
+        </div>
 
 
                <div className="flex items-center gap-4">

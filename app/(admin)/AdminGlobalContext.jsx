@@ -1,21 +1,20 @@
 "use client"
 import axios from 'axios';
 import { createContext, useEffect, useState } from "react";
-import dataoutput from "../lib/data";
+
 export const GlobalContext = createContext()
 
-function GlobalContextprovider({children}) {
+function AdminGlobalContextprovider({children}) {
     const [data,setdata] = useState([]); 
-    const [cart,setCart]=useState([])
-    const [displaydata,setdisplaydata]=useState([])
-  const [cartItems,setCartitems] =useState(false)
+//     const [cart,setCart]=useState([])
+//     const [clicked,setclicked]=useState(false)
+//   const [cartItems,setCartitems] =useState(false)
   
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get("http://localhost:3001/api/products");
-    setdata(response.data);
-    setdisplaydata(response.data)
+    setdata(response.data); 
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -24,10 +23,10 @@ function GlobalContextprovider({children}) {
     fetchProducts();
   }, []);
     return (
-        <GlobalContext.Provider value={{data,setdata,cart,setCart,cartItems,setCartitems,displaydata,setdisplaydata}}>
+        <GlobalContext.Provider value={{data,setdata,}}>
             {children}
         </GlobalContext.Provider>
     )
 }
 
-export default GlobalContextprovider
+export default AdminGlobalContextprovider

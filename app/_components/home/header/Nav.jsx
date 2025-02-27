@@ -8,74 +8,75 @@ import Link from 'next/link';
 import { useContext, useState ,useEffect} from 'react';
 import { GlobalContext } from '@/app/context/GobalContext';
 import Input from '@/app/(admin)/admin/_components/Input';
-
-
 import Cart from "../../Cart";
+
+
 function Nav() {
- const { data, setdata ,cart,cartItems,setCartitems} = useContext(GlobalContext);
+ const { data, setdata ,cart,cartItems,setCartitems,displaydata,setdisplaydata} = useContext(GlobalContext);
     const [filterdata, setFilterdata] = useState("");
     const [errorMessage, setErrorMessage] = useState(false);
-    const [originalData, setOriginalData] = useState(data); 
+    // const [originalData, setOriginalData] = useState(data); 
     const [issignup,setsignup]=useState(false)
   
 
 
-   useEffect(() => {
-    setOriginalData(data); 
-}, [data]);
+
+
 
 useEffect(() => {
-    if (!filterdata) {
-        setdata(originalData); 
-        setErrorMessage(false);
-        return;
+if (!filterdata) {
+       setdisplaydata(data); 
+       setErrorMessage(false);
+       return;
     }
 
-    const filteredData = originalData?.filter((item) =>
+    const filteredData = data?.filter((item) =>
         item.name.toLowerCase().includes(filterdata.toLowerCase())
     );
 
     if (filteredData.length > 0) {
-        setdata(filteredData);
+        setdisplaydata(filteredData);
         setErrorMessage(false);
+         
+
     } else {
         setErrorMessage(true);
 
         
-        const timeout = setTimeout(() => {
-            setErrorMessage(false);
-            setFilterdata(""); // Clear input field
-            setdata(originalData); // Restore original data
-        }, 1000);
+        //  setTimeout(() => {
+        //     setErrorMessage(false);
+        //     setFilterdata(""); 
+        //     setdisplaydata(data);
+        // }, 1000);
 
-        // return () => clearTimeout(timeout);
+        
     }
-}, [filterdata, originalData]);
+}, [filterdata, displaydata]);
 
 
 
-    const increaseQuantity = (id) => {
-  setCart(cart.map(item => 
-    item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-  ));
-};
+//  const increaseQuantity = (id) => {
+//   setCart(cart.map(item => 
+//     item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+//   ));
+// };
 
-const decreaseQuantity = (id) => {
-  setCart(cart.map(item => 
-    item.id === id && item.quantity > 1 
-      ? { ...item, quantity: item.quantity - 1 } 
-      : item
-  ));
-};
+// const decreaseQuantity = (id) => {
+//   setCart(cart.map(item => 
+//     item.id === id && item.quantity > 1 
+//       ? { ...item, quantity: item.quantity - 1 } 
+//       : item
+//   ));
+// };
 
-const removeFromCart = (id) => {
-  setCart(cart.filter(item => item.id !== id));
-};
-
-
+// const removeFromCart = (id) => {
+//   setCart(cart.filter(item => item.id !== id));
+// };
 
 
-    return (
+
+
+ return (
        <div className="bg-white w-full flex my-5 items-center justify-around text-[rgb(89,90,92)]"> 
     
     <Link href='/'><div className="h-[32px] w-[32px] bg-black">1</div></Link>
@@ -83,6 +84,7 @@ const removeFromCart = (id) => {
     <div className="max-w-[768px] px-3  flex items-center justify-between h-[44px] border-[1px] rounded-[10px] border-[rgba(229,231,235,1)] sm:w-[80%] xl:w-[100%] ">
         <input  
           value={filterdata}
+
                     onChange={(e) => setFilterdata(e.target.value)}  type="text" placeholder="Search for products, brands, and more..." className="w-[80%] outline-none" />
 
         <CiSearch />
