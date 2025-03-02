@@ -142,7 +142,7 @@ class ProductGrid extends StatelessWidget {
           shrinkWrap: true,
           physics:
               const NeverScrollableScrollPhysics(), // Disable scrolling for this list
-          itemCount: 6,
+          itemCount: 5,
           padding: EdgeInsets.zero,
           itemBuilder: (context, index) {
             return _buildProductItem(index);
@@ -242,19 +242,20 @@ class ProductGrid extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween, // Changed to spaceBetween
                   children: [
                     // Product name
                     Text(
                       productName,
                       style: const TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: 15,
+                        fontSize: 14, // Reduced font size slightly
+                        height: 1.2, // Reduced line height
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 8),
 
                     // Price row
                     Row(
@@ -301,8 +302,6 @@ class ProductGrid extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 8),
-
                     // Rating and favorite row
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -313,14 +312,14 @@ class ProductGrid extends StatelessWidget {
                             const Icon(
                               Icons.star,
                               color: Color(0xFFFFCC00),
-                              size: 16,
+                              size: 14, // Reduced size
                             ),
                             const SizedBox(width: 4),
                             Text(
                               '${4.0 + (index % 10) / 10}',
                               style: const TextStyle(
                                 color: Colors.grey,
-                                fontSize: 13,
+                                fontSize: 12, // Reduced font size
                               ),
                             ),
                           ],
@@ -332,21 +331,21 @@ class ProductGrid extends StatelessWidget {
                             color: Colors.grey.withOpacity(0.1),
                             shape: BoxShape.circle,
                           ),
-                          child: IconButton(
-                            icon: const FaIcon(
-                              FontAwesomeIcons.heart,
-                              size: 14,
-                              color: Colors.grey,
+                          width: 28, // Fixed width
+                          height: 28, // Fixed height
+                          child: Center(
+                            child: IconButton(
+                              icon: const FaIcon(
+                                FontAwesomeIcons.heart,
+                                size: 12, // Reduced size
+                                color: Colors.grey,
+                              ),
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              onPressed: () {
+                                // Add to favorites
+                              },
                             ),
-                            constraints: const BoxConstraints(
-                              minWidth: 32,
-                              minHeight: 32,
-                            ),
-                            padding: EdgeInsets.zero,
-                            iconSize: 14,
-                            onPressed: () {
-                              // Add to favorites
-                            },
                           ),
                         ),
                       ],
@@ -372,7 +371,7 @@ class ProductGrid extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Container(
-        height: 130,
+        height: 120,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -408,19 +407,20 @@ class ProductGrid extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween, // Changed to spaceBetween
                   children: [
                     // Tool name
                     Text(
                       toolName,
                       style: const TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: 15,
+                        fontSize: 14, // Reduced font size slightly
+                        height: 1.2, // Reduced line height
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 8),
 
                     // Price row
                     Row(
@@ -467,8 +467,6 @@ class ProductGrid extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 8),
-
                     // Rating and favorite row
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -479,14 +477,14 @@ class ProductGrid extends StatelessWidget {
                             const Icon(
                               Icons.star,
                               color: Color(0xFFFFCC00),
-                              size: 16,
+                              size: 14, // Reduced size
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              '${4.2 + (index % 8) / 10}',
+                              (4.0 + (index % 10) / 10).toStringAsFixed(1),
                               style: const TextStyle(
                                 color: Colors.grey,
-                                fontSize: 13,
+                                fontSize: 12, // Reduced font size
                               ),
                             ),
                           ],
@@ -498,21 +496,21 @@ class ProductGrid extends StatelessWidget {
                             color: Colors.grey.withOpacity(0.1),
                             shape: BoxShape.circle,
                           ),
-                          child: IconButton(
-                            icon: const FaIcon(
-                              FontAwesomeIcons.heart,
-                              size: 14,
-                              color: Colors.grey,
+                          width: 28, // Fixed width
+                          height: 28, // Fixed height
+                          child: Center(
+                            child: IconButton(
+                              icon: const FaIcon(
+                                FontAwesomeIcons.heart,
+                                size: 12, // Reduced size
+                                color: Colors.grey,
+                              ),
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              onPressed: () {
+                                // Add to favorites
+                              },
                             ),
-                            constraints: const BoxConstraints(
-                              minWidth: 32,
-                              minHeight: 32,
-                            ),
-                            padding: EdgeInsets.zero,
-                            iconSize: 14,
-                            onPressed: () {
-                              // Add to favorites
-                            },
                           ),
                         ),
                       ],
