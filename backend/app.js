@@ -4,7 +4,10 @@ const path = require('path');
 const productRoutes = require('./routes/productroutes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
-const authMiddleware = require('./middleware/auth');
+const { authMiddleware } = require('./middleware/auth');
+const { ActivityLog } = require('./models/ActivityLog');
+const helmet = require('helmet');
+
 // Initialize express
 const app = express();
 
@@ -14,13 +17,37 @@ const swaggerOptions = {
     openapi: '3.0.0',
     info: {
       title: 'Affiliate API',
-      version: '1.0.0'
-    }
+      version: '1.0.0',
+      description: 'API documentation for the Affiliate marketing platform'
+    },
+    servers: [
+      {
+        url: process.env.API_URL || 'http://localhost:3001',
+        description: 'API Server'
+      }
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        }
+      }
+    },
+    security: [
+      {
+        bearerAuth: []
+      }
+    ]
   },
-  apis: ['./routes/*.js'] // Adjust this path based on where you add your Swagger comments
+  apis: ['./routes/*.js', './middleware/*.js', './models/*.js']
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+// Use Helmet for security headers
+app.use(helmet());
 
 // Configure CORS
 app.use(cors({
@@ -37,10 +64,22 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
 // Routes
-// Apply auth middleware to protected routes
 app.use('/api', authMiddleware);
-app.use('/api', productRoutes);
+app.use('/api/products', productRoutes);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Activity logging middleware
+app.use(async (req, res, next) => {
+  res.on('finish', () => {
+    if (req.user) {
+      ActivityLog.log(req.user.id, req.method, {
+        path: req.path,
+        statusCode: res.statusCode
+      });
+    }
+  });
+  next();
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
