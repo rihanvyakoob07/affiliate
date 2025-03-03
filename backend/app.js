@@ -4,7 +4,7 @@ const path = require('path');
 const productRoutes = require('./routes/productroutes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
-
+const authMiddleware = require('./middleware/auth');
 // Initialize express
 const app = express();
 
@@ -37,6 +37,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
 // Routes
+// Apply auth middleware to protected routes
+app.use('/api', authMiddleware);
 app.use('/api', productRoutes);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
