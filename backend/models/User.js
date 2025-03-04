@@ -148,7 +148,6 @@
 // module.exports = User;
 
 
-
 const db = require('../config/database');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -157,7 +156,7 @@ class User {
   // Existing methods remain unchanged
   
   static authenticateHardcodedUser(email, password) {
-    // Hardcoded user details for development
+    // Define the hardcoded user
     const hardcodedUser = {
       id: 999,
       username: 'admin',
@@ -165,14 +164,12 @@ class User {
       password: 'admin123',
       role: 'admin'
     };
-
+  
     if (email === hardcodedUser.email && password === hardcodedUser.password) {
-      // Use environment variable with fallback for development
-      const jwtSecret = process.env.JWT_SECRET || 'default_development_secret_key';
-      
+      // Here, use hardcodedUser instead of undefined user variable
       const token = jwt.sign(
         { id: hardcodedUser.id, username: hardcodedUser.username, role: hardcodedUser.role },
-        jwtSecret,
+        process.env.JWT_SECRET || 'default_development_secret',
         { expiresIn: '1d' }
       );
       
@@ -189,6 +186,7 @@ class User {
     
     return null;
   }
+  
 
   static async authenticateUser(email, password) {
     try {
@@ -247,4 +245,3 @@ class User {
 }
 
 module.exports = User;
-
