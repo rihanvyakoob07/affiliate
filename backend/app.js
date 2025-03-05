@@ -52,7 +52,7 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use(helmet());
 
 // Configure CORS
-app.use(cors({
+const corsOptions = {
   origin: [
     process.env.FRONTEND_URL || 'http://localhost:3000', // Local development URL
     'https://phpstack-1258401-5273690.cloudwaysapps.com' // Cloudways frontend URL
@@ -60,10 +60,12 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true // Allow cookies or authentication headers
-}));
+};
+
+app.use(cors(corsOptions));
 
 // Handle preflight requests explicitly
-app.options('*', cors());
+app.options('*', cors(corsOptions));
 
 // Middleware
 app.use(express.json());
