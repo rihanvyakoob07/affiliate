@@ -24,7 +24,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: process.env.API_URL || 'http://localhost:3000',
+        url: process.env.API_URL || 'http://localhost:3001',
         description: 'API Server'
       }
     ],
@@ -54,12 +54,16 @@ app.use(helmet());
 // Configure CORS
 app.use(cors({
   origin: [
-    process.env.FRONTEND_URL || 'http://localhost:3000',
-    'https://phpstack-1258401-5273690.cloudwaysapps.com'
+    process.env.FRONTEND_URL || 'http://localhost:3000', // Local development URL
+    'https://phpstack-1258401-5273690.cloudwaysapps.com' // Cloudways frontend URL
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // Allow cookies or authentication headers
 }));
+
+// Handle preflight requests explicitly
+app.options('*', cors());
 
 // Middleware
 app.use(express.json());
@@ -72,28 +76,28 @@ app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 app.post('/api/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    
+
     if (!email || !password) {
       return res.status(400).json({ error: 'Email and password are required' });
     }
-    
+
     const authResult = await User.authenticateUser(email, password);
-    
+
     if (!authResult) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
-    
+
     // Log successful login
     await ActivityLog.log(authResult.user.id, 'LOGIN', { 
       email: authResult.user.email 
     });
-    
+
     // Record session
     const sessionId = await SessionHistory.logLogin(
       authResult.user.id, 
       req.ip
     );
-    
+
     res.json({
       ...authResult,
       sessionId
@@ -108,20 +112,20 @@ app.post('/api/auth/login', async (req, res) => {
 app.post('/api/auth/generate-token', authMiddleware, async (req, res) => {
   try {
     const { userId, username, role } = req.body;
-    
+
     // Only admins can generate tokens for other users
     if (userId !== req.user.id && req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Only admins can generate tokens for other users' });
     }
-    
+
     // Generate new token
     const token = User.generateToken(userId, username, role);
-    
+
     // Log the token generation
     await ActivityLog.log(req.user.id, 'GENERATE_TOKEN', { 
       target_user_id: userId 
     });
-    
+
     res.json({ token });
   } catch (error) {
     console.error('Token generation error:', error);
@@ -154,12 +158,12 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message || 'Something went wrong!' });
 });
 
-// Handle 404
+// Handle 404 errors for undefined routes
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Start the server
 app.listen(PORT, () => {
