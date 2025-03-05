@@ -16,11 +16,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
         
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version: '18.17.1'  # Specify Node.js version directly
           
       - name: Cache npm dependencies
         uses: actions/cache@v3
@@ -41,11 +43,13 @@ jobs:
         
       - name: Upload test results
         uses: actions/upload-artifact@v4
-        if: failure()
+        if: always()  # Always attempt to upload, even if tests fail
         with:
           name: test-results
-          path: test-results/
-          retention-days: 5
+          path: |
+            test-results
+            coverage
+          if-no-files-found: warn  # Warn instead of failing if no files are found
 
     env:
       CI: true
@@ -58,11 +62,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
         
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version: '18.17.1'  # Specify Node.js version directly
           
       - name: Install dependencies
         run: npm ci
